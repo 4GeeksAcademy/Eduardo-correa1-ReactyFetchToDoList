@@ -10,3 +10,42 @@
     import 'relative/path/to/stylesheet.scss';
 
 */
+
+.container{
+    margin-top: 100px;
+    
+}
+
+ul li{
+    list-style: none;
+    border: 1px solid grey;
+    padding: 5px;
+    width: 60vw;
+    text-align: start;
+    
+}
+
+input{
+    border: none;
+    width: 100%;
+    background-color: rgb(235, 232, 252);
+    
+}
+
+ul{
+    padding: 0;
+    margin-bottom: 0;
+}
+.taskContainer{
+    display: inline-block;
+}
+.taskCounter{
+    margin-top: 1px;
+}
+
+.btn:hover{
+    background: rgb(235, 232, 252);
+}
+.btn{
+    background-color: rgb(213, 208, 245);
+}
