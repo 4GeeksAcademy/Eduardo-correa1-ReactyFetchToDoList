@@ -4,6 +4,8 @@ import React,{ useState } from "react";
 
 const CreateUser = ({nameInHome})=>{
     const [userName, setUserName] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+
     const handleInputChange = (e) => {
         setUserName(e.target.value);
     }
@@ -17,21 +19,23 @@ const CreateUser = ({nameInHome})=>{
             body: ""
             });
             if (!response.ok){
-                throw new Error("Error al crear el usuario");                
+                throw new Error("El nombre no es válido o ya existe, prueba otro");                
             }
             
             const data = await response.json();
             console.log("Usuario creado", data);
-            nameInHome(userName)            
+            nameInHome(userName)
+            setErrorMessage("");            
         } catch (error) {
-            console.log(error)
+            setErrorMessage(error.message)
         }
     };
 
     return(
-        <nav class="navbar navbar-light text-center">
-  <span class="navbar-brand m-2 h1">
+        <nav className="navbar navbar-light text-center">
+  <span className="navbar-brand m-2 h1">
     <input type="text" placeholder="Introduce tu Nombre" value={userName} onChange={handleInputChange} /> <button className="btn" onClick={postUser}>Crear usuario</button></span>
+    {errorMessage && <div className="alert alert-danger mt-2">{errorMessage}</div>}
 </nav>
 
     )
