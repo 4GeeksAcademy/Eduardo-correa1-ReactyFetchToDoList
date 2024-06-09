@@ -1,12 +1,13 @@
 import React from "react";
 
 
-const DeleteButton = () =>{
+const DeleteButton = ({clearTasks}) =>{
+           
     return(
         <div>
-			<button className="btn">Borrar todas las tareas</button>
+			<button className="btn" onClick={clearTasks}>Borrar todas las tareas</button>
 			</div>
     )
 }
 
-export default DeleteButton
+export default DeleteButton;

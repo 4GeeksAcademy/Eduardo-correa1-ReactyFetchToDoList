@@ -24,7 +24,8 @@ const CreateUser = ({nameInHome})=>{
             
             const data = await response.json();
             console.log("Usuario creado", data);
-            nameInHome(userName)
+            nameInHome(userName);
+            setUserName("");
             setErrorMessage("");            
         } catch (error) {
             setErrorMessage(error.message)

@@ -1,10 +1,15 @@
 import React, { useState } from "react";
 
-const ListTodos = ({userName})=>{
+const ListTodos = ({userName, tasks, setTasks })=>{
 
     const [inputValue, setInputValue] = useState("");
-    const [tasks, setTasks] = useState([]);
-    const PostToDo = async()=>{
+    const [errorMessage, setErrorMessage] = useState("");
+    
+    const postToDo = async()=>{
+        if(!userName){
+            setErrorMessage("Debes crear un usuario antes de agregar tareas.");
+            return;
+        }
         const bodyToDo = {label: inputValue, done: false};
         try {
             const response = await fetch(`https://playground.4geeks.com/todo/todos/${userName}`,{
@@ -23,6 +28,7 @@ const ListTodos = ({userName})=>{
 			console.log(result)
             setTasks([...tasks, inputValue]);
             setInputValue("");
+            setErrorMessage("");
             
         } catch (error) {
             console.log(error)
@@ -34,11 +40,12 @@ const ListTodos = ({userName})=>{
 				<li><input type="text" placeholder="Agrega tu tarea" onChange={(tarea)=>
                     setInputValue(tarea.target.value)} value={inputValue} onKeyPress={(event)=>{
                         if(event.key === "Enter"){
-                            PostToDo();
+                            postToDo();
                     }}}/></li>
                     {tasks.map((task, index) => <li key={index}><i onClick={()=>setTasks(tasks.filter((_, currentIndex) => index != currentIndex))} className="fas fa-trash-alt"></i> {task}</li>)}
 				
 			</ul>
+            {errorMessage && <div className="alert alert-danger mt-2">{errorMessage}</div>}
 			<div className="text-start taskCounter"><p>{tasks.length} tareas pendientes</p></div>
             </div>
     )
