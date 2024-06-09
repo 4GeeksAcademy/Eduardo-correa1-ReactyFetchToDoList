@@ -26,7 +26,7 @@ const ListTodos = ({userName, tasks, setTasks })=>{
             }
             const result = await response.json()
 			console.log(result)
-            setTasks([...tasks, inputValue]);
+            setTasks([...tasks, { label: inputValue, done: false, id: result.id }]);
             setInputValue("");
             setErrorMessage("");
             
@@ -34,6 +34,36 @@ const ListTodos = ({userName, tasks, setTasks })=>{
             console.log(error)
         }
     }
+//funcion PUT
+const taskDone = async (taskId, index) =>{
+    const task = tasks[index];
+    const updatedTask = { label: task.label, is_done: !task.is_done };
+    try {
+        const response = await fetch(`https://playground.4geeks.com/todo/todos/${taskId}`,{
+            method: "PUT",
+            headers: {
+                accept: "application/json",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(updatedTask)
+        });
+        if (!response.ok) {
+            throw new Error("Error al actualizar la tarea");
+        }
+        const result = await response.json();
+        console.log(result);
+        const updatedTasks = tasks.map((task, i) =>
+            i === index ? { ...task, is_done: updatedTask.is_done } : task
+        );
+        setTasks(updatedTasks);
+        setErrorMessage("");
+    } catch (error) {
+        console.log(error)
+    }
+};
+    const pendingTasks = tasks.filter(task => !task.is_done).length;
+    const doneTasks = tasks.filter(task => task.is_done).length;
+
     return(
         <div className="taskContainer">
 			<ul className="mt-5 text-center">
@@ -42,11 +72,14 @@ const ListTodos = ({userName, tasks, setTasks })=>{
                         if(event.key === "Enter"){
                             postToDo();
                     }}}/></li>
-                    {tasks.map((task, index) => <li key={index}><i onClick={()=>setTasks(tasks.filter((_, currentIndex) => index != currentIndex))} className="fas fa-trash-alt"></i> {task}</li>)}
+                    {tasks.map((task, index) => <li key={index}><i onClick={()=>taskDone(task.id, index)}
+                            className={task.is_done ? "fas fa-check-square" : "far fa-square"}
+                        ></i>{" "}
+                        {task.label}</li>)}
 				
 			</ul>
             {errorMessage && <div className="alert alert-danger mt-2">{errorMessage}</div>}
-			<div className="text-start taskCounter"><p>{tasks.length} tareas pendientes</p></div>
+			<div className="text-start taskCounter"><p>{pendingTasks} tareas pendientes, {doneTasks} tareas realizadas</p></div>
             </div>
     )
 };

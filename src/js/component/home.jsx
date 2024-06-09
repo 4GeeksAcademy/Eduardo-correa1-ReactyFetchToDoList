@@ -6,7 +6,7 @@ import DeleteButton from "./DeleteButton";
 const Home = () => {
 	const [createdUserName, setCreatedUserName] = useState("");
 	const [tasks, setTasks] = useState([]);
-
+// Elimina el usuario y todas las tareas
 	const clearTasks = async () => {
 		try {
             const response = await fetch(`https://playground.4geeks.com/todo/users/${createdUserName}`, {
@@ -22,24 +22,16 @@ const Home = () => {
         } catch (error) {
             console.log(error);
         }
-    };
-	
-	
+    };	
 	return (
-		<>
+		<>		
 		<CreateUser nameInHome={setCreatedUserName} />
-
-		<div className="text-center container">
-			
+		<div className="text-center container">			
 			<h1 className="text-center mt-5">Tareas pendientes {createdUserName}</h1>
 			<ListTodos userName={createdUserName} tasks={tasks} setTasks={setTasks} />
 			<DeleteButton clearTasks={clearTasks} />
 		</div>
 		</>
-	);
-	
+	);	
 };
-
-
-
 export default Home;
